@@ -2,59 +2,75 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
-import { verifyToken } from '@/lib/auth';
+import { signToken } from '@/lib/auth';
 
 export async function POST(req: Request) {
   try {
-    const { currentPassword, newPassword } = await req.json();
-
-    // ✅ Validate input
-    if (!currentPassword || !newPassword) {
-      return NextResponse.json(
-        { error: 'Current password and new password are required' },
-        { status: 400 }
-      );
-    }
-
     await dbConnect();
 
-    // ✅ Get user from token (adjust if your logic differs)
-    const token = req.headers.get('authorization')?.split(' ')[1];
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { email, password } = await req.json();
 
-    const decoded: any = verifyToken(token);
-    const user = await User.findById(decoded.userId);
-
-    // ✅ IMPORTANT: ensure password exists
-    if (!user || !user.password) {
+    if (!email || !password) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    // ✅ Type-safe bcrypt compare
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-
-    if (!isMatch) {
-      return NextResponse.json(
-        { error: 'Incorrect current password' },
+        { error: 'Email and password are required' },
         { status: 400 }
       );
     }
 
-    // ✅ Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
 
-    return NextResponse.json({ message: 'Password changed successfully' });
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
+
+    // Create token
+    const token = signToken({ userId: user._id, role: user.role });
+
+    // Create response
+    const response = NextResponse.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        department: user.department,
+        profilePicture: user.profilePicture,
+        ...(user.role === 'student' && {
+          usn: user.usn,
+          semester: user.semester
+        })
+      },
+      message: 'Login successful'
+    });
+
+    // Set Cookie
+    response.cookies.set({
+      name: 'token',
+      value: token,
+      httpOnly: false, // Allow client JS to read if needed, though secure is better
+      path: '/',
+      maxAge: 60 * 60 * 24 // 1 day
+    });
+
+    return response;
+
   } catch (error: any) {
-    console.error('Change Password Error:', error);
+    console.error('Login Error:', error);
     return NextResponse.json(
-      { error: error.message || 'Server error' },
+      { error: 'Server error during login' },
       { status: 500 }
     );
   }
