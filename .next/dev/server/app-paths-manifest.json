@@ -1,0 +1,21 @@
+{
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/profile/route": "app/api/profile/route.js",
+  "/api/results/student/route": "app/api/results/student/route.js",
+  "/api/tests/[id]/results/route": "app/api/tests/[id]/results/route.js",
+  "/api/tests/[id]/route": "app/api/tests/[id]/route.js",
+  "/api/tests/[id]/start/route": "app/api/tests/[id]/start/route.js",
+  "/api/tests/[id]/submit/route": "app/api/tests/[id]/submit/route.js",
+  "/api/tests/create/route": "app/api/tests/create/route.js",
+  "/api/tests/student/route": "app/api/tests/student/route.js",
+  "/api/tests/teacher/route": "app/api/tests/teacher/route.js",
+  "/page": "app/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/student/dashboard/page": "app/student/dashboard/page.js",
+  "/student/test/[id]/page": "app/student/test/[id]/page.js",
+  "/teacher/create-test/page": "app/teacher/create-test/page.js",
+  "/teacher/dashboard/page": "app/teacher/dashboard/page.js",
+  "/teacher/edit-test/[id]/page": "app/teacher/edit-test/[id]/page.js",
+  "/teacher/test/[id]/results/page": "app/teacher/test/[id]/results/page.js"
+}
