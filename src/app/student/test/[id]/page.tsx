@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, use } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import { AlertTriangle, Expand, Camera, Clock } from 'lucide-react';
 
-export default function TestPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
+export default function TestPage({ params }: { params: { id: string } }) {
+    const { id } = params;
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [test, setTest] = useState<any>(null);

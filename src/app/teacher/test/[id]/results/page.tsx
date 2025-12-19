@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import axios from 'axios';
 import { ArrowLeft, Download, Search } from 'lucide-react';
 import Link from 'next/link';
 
-export default function ResultsPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
+export default function ResultsPage({ params }: { params: { id: string } }) {
+    const { id } = params;
     const [data, setData] = useState<{ test: any, results: any[] } | null>(null);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('');

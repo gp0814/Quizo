@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import axios from 'axios';
 import { Plus, Trash2, CheckCircle, ChevronRight, ChevronLeft } from 'lucide-react';
 
-export default function EditTestPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
+export default function EditTestPage({ params }: { params: { id: string } }) {
+    const { id } = params;
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
