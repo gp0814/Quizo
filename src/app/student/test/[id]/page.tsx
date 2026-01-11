@@ -145,15 +145,15 @@ export default function TestPage({ params }: { params: { id: string } }) {
 
             setStarted(false); // Stop monitoring immediately 
 
-            await axios.post(`/api/tests/${id}/submit`, { answers: answersArray });
+            const res = await axios.post(`/api/tests/${id}/submit`, { answers: answersArray });
 
             // Explicitly exit fullscreen
             if (document.fullscreenElement) {
                 await document.exitFullscreen().catch(err => console.log("Exit fullscreen failed", err));
             }
 
-            router.push('/student/dashboard');
-            alert('Test Submitted Successfully!');
+            router.push(`/student/results/${res.data.resultId}`);
+            // alert('Test Submitted Successfully!');
         } catch (err) {
             isSubmitting.current = false;
             alert('Failed to submit, trying again...');

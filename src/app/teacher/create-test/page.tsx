@@ -63,6 +63,7 @@ export default function CreateTestPage() {
         try {
             await axios.post('/api/tests/create', {
                 ...details,
+                startTime: details.startTime ? new Date(details.startTime).toISOString() : '',
                 settings,
                 questions
             });

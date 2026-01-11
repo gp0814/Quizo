@@ -43,7 +43,12 @@ export default function EditTestPage({ params }: { params: { id: string } }) {
                     department: t.department,
                     semester: t.semester,
                     duration: t.duration,
-                    startTime: t.startTime ? new Date(t.startTime).toISOString().slice(0, 16) : ''
+                    // Convert UTC to local time string for datetime-local input
+                    startTime: t.startTime ? (() => {
+                        const d = new Date(t.startTime);
+                        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                        return d.toISOString().slice(0, 16);
+                    })() : ''
                 });
                 setSettings(t.settings);
                 setQuestions(t.questions);
@@ -89,6 +94,7 @@ export default function EditTestPage({ params }: { params: { id: string } }) {
         try {
             await axios.put(`/api/tests/${id}`, {
                 ...details,
+                startTime: details.startTime ? new Date(details.startTime).toISOString() : '',
                 questions, // Send questions to update them too
                 settings // Send settings
             });

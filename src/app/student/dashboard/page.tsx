@@ -113,7 +113,11 @@ export default function StudentDashboard() {
                                             <td className="p-4 text-sm text-gray-500">{new Date(r.submittedAt).toLocaleDateString()}</td>
                                             <td className="p-4 font-bold text-blue-600">{r.score} / {r.totalMarks}</td>
                                             <td className="p-4">
-                                                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold uppercase">Completed</span>
+                                                <Link href={`/student/results/${r._id}`}>
+                                                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold uppercase hover:bg-green-200 cursor-pointer">
+                                                        View Result
+                                                    </span>
+                                                </Link>
                                             </td>
                                         </tr>
                                     ))}
