@@ -18,6 +18,7 @@ export default function ProfilePage() {
     const [formData, setFormData] = useState({
         name: '',
         semester: '',
+        department: '',
         currentPassword: '',
         newPassword: ''
     });
@@ -36,7 +37,8 @@ export default function ProfilePage() {
             setFormData(prev => ({
                 ...prev,
                 name: res.data.user.name,
-                semester: res.data.user.semester || ''
+                semester: res.data.user.semester || '',
+                department: res.data.user.department || ''
             }));
         } catch (err) {
             router.push('/login');
@@ -57,7 +59,10 @@ export default function ProfilePage() {
                 setMsg({ type: 'success', text: 'Password updated successfully' });
                 setPasswordMode(false);
             } else {
-                const payload: any = { name: formData.name };
+                const payload: any = {
+                    name: formData.name,
+                    department: formData.department
+                };
                 if (user.role === 'student') payload.semester = formData.semester;
 
                 await axios.put('/api/profile', payload);
@@ -217,6 +222,11 @@ export default function ProfilePage() {
                                                 label="Name"
                                                 value={formData.name}
                                                 onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                            />
+                                            <Input
+                                                label="Department"
+                                                value={formData.department}
+                                                onChange={e => setFormData({ ...formData, department: e.target.value })}
                                             />
                                             {user.role === 'student' && (
                                                 <Input

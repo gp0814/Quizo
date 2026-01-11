@@ -40,7 +40,7 @@ export async function PUT(req: Request) {
         }
 
         const body = await req.json();
-        const { name, semester, profilePicture } = body;
+        const { name, semester, profilePicture, department } = body;
 
         await dbConnect();
         const user = await User.findById(userId);
@@ -51,13 +51,14 @@ export async function PUT(req: Request) {
 
         // Role-based validation
         if (user.role === 'student') {
-            // Students can edit Name, Semester
+            // Students can edit Name, Semester, Department
             if (name) user.name = name;
             if (semester) user.semester = semester;
+            if (department) user.department = department;
         } else {
-            // Teachers can edit Name
+            // Teachers can edit Name, Department
             if (name) user.name = name;
-            // Teachers cannot edit Department (read-only per logic, provided only at registration)
+            if (department) user.department = department;
         }
 
         if (profilePicture !== undefined) {

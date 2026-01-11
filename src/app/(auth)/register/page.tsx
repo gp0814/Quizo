@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import Link from 'next/link';
 import axios from 'axios';
+import { ChevronDown } from 'lucide-react';
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -53,8 +54,8 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => setRole('student')}
                     className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${role === 'student'
-                            ? 'bg-white dark:bg-gray-700 shadow text-blue-600 dark:text-white'
-                            : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        ? 'bg-white dark:bg-gray-700 shadow text-blue-600 dark:text-white'
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                         }`}
                 >
                     Student
@@ -63,8 +64,8 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => setRole('teacher')}
                     className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${role === 'teacher'
-                            ? 'bg-white dark:bg-gray-700 shadow text-blue-600 dark:text-white'
-                            : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        ? 'bg-white dark:bg-gray-700 shadow text-blue-600 dark:text-white'
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                         }`}
                 >
                     Teacher
@@ -105,13 +106,27 @@ export default function RegisterPage() {
                 />
 
                 <div className="grid grid-cols-2 gap-4">
-                    <Input
-                        label="Department"
-                        placeholder="CSE"
-                        value={formData.department}
-                        onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                        required
-                    />
+                    <div className="w-full space-y-1.5">
+                        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">
+                            Department
+                        </label>
+                        <div className="relative">
+                            <select
+                                value={formData.department}
+                                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                                required
+                                className="flex w-full rounded-xl border-2 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 px-4 py-3 text-sm ring-offset-white placeholder:text-slate-400 focus-visible:outline-none focus-visible:border-blue-500 focus-visible:ring-4 focus-visible:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 appearance-none"
+                            >
+                                <option value="" disabled>Select Department</option>
+                                <option value="AIML">AIML</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ISE">ISE</option>
+                            </select>
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                <ChevronDown size={16} />
+                            </div>
+                        </div>
+                    </div>
                     {role === 'student' && (
                         <Input
                             label="Semester"
